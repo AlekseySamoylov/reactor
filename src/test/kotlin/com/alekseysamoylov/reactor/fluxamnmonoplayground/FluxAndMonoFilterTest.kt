@@ -19,5 +19,4 @@ class FluxAndMonoFilterTest {
         .expectNext("adam","anna")
         .verifyComplete()
   }
-
 }
