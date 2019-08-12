@@ -1,17 +1,14 @@
 package com.alekseysamoylov.reactor.controller
 
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.http.MediaType
-import org.springframework.test.web.reactive.server.EntityExchangeResult
 import org.springframework.test.web.reactive.server.WebTestClient
-import reactor.core.publisher.Flux
+import org.springframework.web.bind.annotation.ResponseBody
 import reactor.test.StepVerifier
-import reactor.test.scheduler.VirtualTimeScheduler
-import java.time.Duration
-import java.util.function.Consumer
 
 @WebFluxTest
 class FluxAndMonoControllerTest {
@@ -69,5 +66,36 @@ class FluxAndMonoControllerTest {
         .expectBodyList(Int::class.java)
         .consumeWith<WebTestClient.ListBodySpec<Int>> { Assertions.assertEquals(expectedList, it.responseBody) }
 
+  }
+
+  @Test
+  fun fluxStream() {
+    val longStreamFlux = webTestClient.get().uri("/fluxstream")
+        .accept(MediaType.APPLICATION_STREAM_JSON)
+        .exchange()
+        .expectStatus().isOk
+        .returnResult(Long::class.java)
+        .responseBody
+
+    StepVerifier.create(longStreamFlux)
+        .expectNext(0L)
+        .expectNext(1L)
+        .expectNext(2L)
+        .thenCancel()
+        .verify()
+  }
+
+  @Test
+  fun mono() {
+    val expectedValue = 1
+    val result = webTestClient.get().uri("/mono")
+        .accept(MediaType.APPLICATION_JSON)
+        .exchange()
+        .expectStatus().isOk
+        .expectBody(Int::class.java)
+        .returnResult()
+        .responseBody
+
+    assertEquals(expectedValue, result)
   }
 }
