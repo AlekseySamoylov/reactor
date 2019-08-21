@@ -4,10 +4,8 @@ services:
 
   mongo:
     image: mongo:4.0-xenial
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
 
   mongo-express:
     image: mongo-express
