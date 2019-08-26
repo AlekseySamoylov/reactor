@@ -20,7 +20,8 @@ class ItemReactiveRepositoryTest(
   private val logger = LogManager.getLogger()
   private val items = listOf(
       Item(UUID.randomUUID().toString(), "Apple Iphone XXL", 5000.0),
-      Item(UUID.randomUUID().toString(), "Apple Iphone XXL", 10000.0)
+      Item(UUID.randomUUID().toString(), "Apple Iphone XXL", 10000.0),
+      Item("ABC", "Apple Iphone XXXL", 10000.0)
   )
 
   @BeforeEach
@@ -42,7 +43,15 @@ class ItemReactiveRepositoryTest(
   fun getAllItems() {
     StepVerifier.create(itemReactiveRepository.findAll())
         .expectSubscription()
-        .expectNextCount(2)
+        .expectNextCount(3)
+        .verifyComplete()
+  }
+
+  @Test
+  fun getItemById() {
+    StepVerifier.create(itemReactiveRepository.findById("ABC"))
+        .expectSubscription()
+        .expectNextMatches {it.description == "Apple Iphone XXXL"}
         .verifyComplete()
   }
 }
