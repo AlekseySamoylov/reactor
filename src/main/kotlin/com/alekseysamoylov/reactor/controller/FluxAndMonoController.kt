@@ -14,7 +14,7 @@ class FluxAndMonoController {
   @GetMapping("/flux")
   fun getFlux(): Flux<Int> {
     return Flux.just(1,2,3,4)
-        .delayElements(Duration.ofSeconds(1))
+//        .delayElements(Duration.ofSeconds(1))
         .log()
   }
 

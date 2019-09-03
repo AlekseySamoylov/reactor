@@ -2,20 +2,25 @@ package com.alekseysamoylov.reactor.controller
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.web.bind.annotation.ResponseBody
 import reactor.test.StepVerifier
 
-@WebFluxTest
+@DirtiesContext
+@SpringBootTest
+@AutoConfigureWebTestClient
 class FluxAndMonoControllerTest {
 
   @Autowired
   lateinit var webTestClient: WebTestClient
 
+  @Tag("slow")
   @Test
   fun fluxApproachOne() {
     val integerFlux = webTestClient.get().uri("/flux")
@@ -31,6 +36,7 @@ class FluxAndMonoControllerTest {
         .verifyComplete()
   }
 
+  @Tag("slow")
   @Test
   fun fluxApproachSecond() {
     webTestClient.get().uri("/flux")
@@ -42,6 +48,7 @@ class FluxAndMonoControllerTest {
         .hasSize(4)
   }
 
+  @Tag("slow")
   @Test
   fun fluxApproachThird() {
     val expectedList = listOf(1, 2, 3, 4)
@@ -55,6 +62,7 @@ class FluxAndMonoControllerTest {
     Assertions.assertEquals(expectedList, entityExchangeResult.responseBody)
   }
 
+  @Tag("slow")
   @Test
   fun fluxApproachFourth() {
     val expectedList = listOf(1, 2, 3, 4)
@@ -66,8 +74,10 @@ class FluxAndMonoControllerTest {
         .expectBodyList(Int::class.java)
         .consumeWith<WebTestClient.ListBodySpec<Int>> { Assertions.assertEquals(expectedList, it.responseBody) }
 
+    Assertions.assertEquals(expectedList, entityExchangeResult.returnResult().responseBody)
   }
 
+  @Tag("slow")
   @Test
   fun fluxStream() {
     val longStreamFlux = webTestClient.get().uri("/fluxstream")
@@ -85,6 +95,7 @@ class FluxAndMonoControllerTest {
         .verify()
   }
 
+  @Tag("slow")
   @Test
   fun mono() {
     val expectedValue = 1

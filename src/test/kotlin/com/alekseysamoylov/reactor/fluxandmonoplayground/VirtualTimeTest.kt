@@ -1,4 +1,4 @@
-package com.alekseysamoylov.reactor.fluxamnmonoplayground
+package com.alekseysamoylov.reactor.fluxandmonoplayground
 
 import org.junit.jupiter.api.Test
 import reactor.core.publisher.Flux
@@ -12,6 +12,7 @@ class VirtualTimeTest {
   @Test
   fun testingWithoutVirtualTime() {
     val longFlux = Flux.interval(Duration.ofSeconds(1))
+        .take(3)
 
     StepVerifier.create(longFlux.log())
         .expectSubscription()
@@ -24,5 +25,11 @@ class VirtualTimeTest {
     VirtualTimeScheduler.getOrSet()
     val longFlux = Flux.interval(Duration.ofSeconds(1))
         .take(3)
+
+    StepVerifier.withVirtualTime { longFlux.log() }
+        .expectSubscription()
+        .thenAwait(Duration.ofSeconds(3))
+        .expectNext(0,1,2)
+        .verifyComplete()
   }
 }

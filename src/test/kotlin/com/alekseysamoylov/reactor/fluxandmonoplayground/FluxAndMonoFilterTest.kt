@@ -1,4 +1,4 @@
-package com.alekseysamoylov.reactor.fluxamnmonoplayground
+package com.alekseysamoylov.reactor.fluxandmonoplayground
 
 import org.junit.jupiter.api.Test
 import reactor.core.publisher.Flux

@@ -1,4 +1,4 @@
-package com.alekseysamoylov.reactor.fluxamnmonoplayground;
+package com.alekseysamoylov.reactor.fluxandmonoplayground;
 
 
 import java.time.Duration;

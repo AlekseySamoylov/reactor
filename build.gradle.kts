@@ -28,8 +28,9 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-api")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
   testImplementation("com.ninja-squad:springmockk:1.1.2")
-  
+
   testImplementation("io.projectreactor:reactor-test")
+  testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
 }
 
 tasks.withType<KotlinCompile> {
@@ -37,4 +38,9 @@ tasks.withType<KotlinCompile> {
     freeCompilerArgs = listOf("-Xjsr305=strict")
     jvmTarget = "1.8"
   }
+}
+
+tasks.withType<Test> {
+  exclude("com/alekseysamoylov/reactor/fluxandmonoplayground")
+  useJUnitPlatform()
 }

@@ -6,16 +6,22 @@ spring:
   profiles: dev
   data.mongodb:
     host: localhost
-    port: 27017
+    port: 37017
 ---
 spring:
   profiles: nonprod
   data.mongodb:
     host: localhost
-    port: 27017
+    port: 47017
 ---
 spring:
   profiles: prod
+  data.mongodb:
+    host: localhost
+    port: 27017
+---
+spring:
+  profiles: test
   data.mongodb:
     host: localhost
     port: 27017
